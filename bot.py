@@ -26,14 +26,14 @@ class DiscordBot:
         while(i<1):
             self.type_like_a_person(self.message,input)
             input.send_keys(Keys.RETURN)
-            time.sleep(random.randint(1, 5) / 10)
+            # time.sleep(random.randint(1, 5) / 30)
     @staticmethod
     def type_like_a_person(sentence, single_input_field):
         """ Este código irá basicamente permitir que você simule a digitação como uma pessoa """
         print("going to start typing message into message share text area")
-        for letter in sentence:
+        for letter in sentence.split():
             single_input_field.send_keys(letter)
-            time.sleep(random.randint(1, 5) / 30)
+            # time.sleep(0.7)
 
 
 bot = DiscordBot()
