@@ -27,26 +27,7 @@ class DiscordBot:
         self.type_like_a_person("p!cleanup", input)
         while i < 292:
             i += 1
-            print(i)
-            input.send_keys("p")
-            input.send_keys("!")
-            input.send_keys("m")
-            input.send_keys("a")
-            input.send_keys("r")
-            input.send_keys("k")
-            input.send_keys("e")
-            input.send_keys("t")
-            input.send_keys(" ")
-            input.send_keys("a")
-            input.send_keys("d")
-            input.send_keys("d")
-            input.send_keys(" ")
-            for j in str(i).split():
-                input.send_keys(j)
-                time.sleep(1)
-            input.send_keys(" ")
-            input.send_keys("2")
-            input.send_keys("0")
+            self.type_like_a_person("p!market add {} 20".format(i), input, True)
             input.send_keys(Keys.RETURN)
             time.sleep(5)
             try:
@@ -75,8 +56,8 @@ class DiscordBot:
     @staticmethod
     def type_like_a_person(sentence, single_input_field, spamming=False):
         """Este código irá basicamente permitir que você simule a digitação como uma pessoa"""
-        print("going to start typing message into message share text area")
-        for letter in sentence.split():
+        # print("going to start typing message into message share text area")
+        for letter in sentence:
             single_input_field.send_keys(letter)
             time.sleep(0.7) if spamming == False else ""
 
