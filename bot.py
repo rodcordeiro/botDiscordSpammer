@@ -23,7 +23,11 @@ class DiscordBot:
         driver = self.driver
         input = driver.find_element(By.XPATH, "//div[@aria-label='Message #spammar']")
         input.click()
-        for i in range(366):
+        i = 29
+        self.type_like_a_person("p!cleanup", input)
+        while i < 292:
+            i += 1
+            print(i)
             input.send_keys("p")
             input.send_keys("!")
             input.send_keys("m")
@@ -44,33 +48,37 @@ class DiscordBot:
             input.send_keys("2")
             input.send_keys("0")
             input.send_keys(Keys.RETURN)
-            time.sleep(10)
+            time.sleep(5)
             try:
                 confirm = driver.find_element(By.XPATH, "//div[@class='label-31sIdr']")
                 confirm.click()
-                time.sleep(2)
+                time.sleep(1)
             except:
                 print("Não foi possível localizar o confirm")
         self.type_like_a_person("p!cleanup", input)
         self.type_like_a_person("Venda de pokemons concluída", input)
+        self.type_like_a_person("p!s 34", input)
+        self.spamming()
+        self.type_like_a_person("p!s 227", input)
+        self.spamming()
 
     def spamming(self):
         driver = self.driver
         input = driver.find_element(By.XPATH, "//div[@aria-label='Message #spammar']")
         input.click()
         i = 0
-        while i < 1:
-            self.type_like_a_person(self.message, input)
+        while i < 3000:
+            self.type_like_a_person(self.message, input, True)
             input.send_keys(Keys.RETURN)
             time.sleep(random.randint(1, 5) / 30)
 
     @staticmethod
-    def type_like_a_person(sentence, single_input_field):
+    def type_like_a_person(sentence, single_input_field, spamming=False):
         """Este código irá basicamente permitir que você simule a digitação como uma pessoa"""
         print("going to start typing message into message share text area")
         for letter in sentence.split():
             single_input_field.send_keys(letter)
-            time.sleep(0.7)
+            time.sleep(0.7) if spamming == False else ""
 
 
 bot = DiscordBot()
