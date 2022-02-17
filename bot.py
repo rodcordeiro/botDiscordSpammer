@@ -27,7 +27,7 @@ class DiscordBot:
         self.type_like_a_person("p!cleanup", input)
         while i < 292:
             i += 1
-            self.type_like_a_person("p!market add {} 20".format(i), input, True)
+            self.type_like_a_person("p!market add {} 20".format(i), input)
             input.send_keys(Keys.RETURN)
             time.sleep(5)
             try:
@@ -38,28 +38,50 @@ class DiscordBot:
                 print("Não foi possível localizar o confirm")
         self.type_like_a_person("p!cleanup", input)
         self.type_like_a_person("Venda de pokemons concluída", input)
+        self.evolveByCandies()
+        self.spamming()
         self.type_like_a_person("p!s 34", input)
+        self.evolveByCandies()
         self.spamming()
-        self.type_like_a_person("p!s 227", input)
-        self.spamming()
+        self.type_like_a_person("p!reindex", input)
+        self.type_like_a_person("p!cleanup", input)
+        driver.get("https://discord.com/channels/911248622421704704/925735083313348618")
+        time.sleep(15)
+        input = driver.find_element(By.XPATH, "//div[@aria-label='Message #spammar']")
+        input.click()
+        self.type_like_a_person("Envio finalizado", input)
+        self.type_like_a_person("Envio finalizado", input)
+
 
     def spamming(self):
         driver = self.driver
         input = driver.find_element(By.XPATH, "//div[@aria-label='Message #spammar']")
         input.click()
         i = 0
-        while i < 3000:
-            self.type_like_a_person(self.message, input, True)
+        while i < 5000:
+            self.type_like_a_person(self.message, input)
             input.send_keys(Keys.RETURN)
             time.sleep(random.randint(1, 5) / 30)
+            i += 1
+
+    def evolveByCandies(self):
+        driver = self.driver
+        input = driver.find_element(By.XPATH, "//div[@aria-label='Message #spammar']")
+        input.click()
+        balance = 2000
+        while balance > 75:
+            self.type_like_a_person("p!buy rare candies", input)
+            input.send_keys(Keys.RETURN)
+            time.sleep(random.randint(1, 5) / 30)
+            balance -= 75
 
     @staticmethod
-    def type_like_a_person(sentence, single_input_field, spamming=False):
+    def type_like_a_person(sentence, single_input_field, Timing=False):
         """Este código irá basicamente permitir que você simule a digitação como uma pessoa"""
         # print("going to start typing message into message share text area")
         for letter in sentence:
             single_input_field.send_keys(letter)
-            time.sleep(0.7) if spamming == False else ""
+            time.sleep(0.7) if Timing else ""
 
 
 bot = DiscordBot()
