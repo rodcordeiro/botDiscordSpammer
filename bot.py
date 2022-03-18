@@ -17,7 +17,7 @@ def logging(message):
 
 class DiscordBot:
     def __init__(self):
-        profile = webdriver.Firefox()
+        profile = webdriver.Chrome('./drivers/chromedriver_v99.exe')
         """Instancia do selenium """
         self.driver = profile
         logging("Iniciando browser")
@@ -32,10 +32,11 @@ class DiscordBot:
             By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
         )
         self.type_like_a_person("p!cleanup", input, True)
-        self.selling(1, 130, 20)
+        self.selling(62, 163, 20)
         self.spamming(77)
         self.type_like_a_person("p!cleanup", input)
 
+        
     def selling(self, start=0, limit=300, value=20, reindex=True):
         logging("Iniciando venda de pokemons")
         logging(f"ID de inicio {start}")
