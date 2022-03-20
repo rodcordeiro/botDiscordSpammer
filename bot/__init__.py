@@ -15,7 +15,7 @@ def logging(message):
     # print(message)
 
 
-class DiscordBot:
+class Bot:
     def __init__(self):
         profile = webdriver.Chrome('./drivers/chromedriver_v99.exe')
         """Instancia do selenium """
@@ -31,13 +31,8 @@ class DiscordBot:
         input = driver.find_element(
             By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
         )
-        self.type_like_a_person("p!cleanup", input, True)
-        self.selling(62, 163, 20)
-        self.spamming(77)
-        self.type_like_a_person("p!cleanup", input)
 
-        
-    def selling(self, start=0, limit=300, value=20, reindex=True):
+    def addMarket(self, start=0, limit=300, value=20, reindex=True):
         logging("Iniciando venda de pokemons")
         logging(f"ID de inicio {start}")
         logging(f"ID final {limit}")
@@ -51,21 +46,37 @@ class DiscordBot:
         self.type_like_a_person("p!cleanup", input, True)
         time.sleep(10)
         while i < limit:
-            i += 1
             time.sleep(10)
             self.type_like_a_person("p!market add {} {}".format(i, value), input, True)
             time.sleep(6)
-            try:
-                confirm = driver.find_element(By.XPATH, "//div[@class='label-31sIdr']")
-                confirm.click()
-                time.sleep(1)
-            except:
-                print("Não foi possível localizar o confirm")
+            self.confirm()
+            i += 1
         self.type_like_a_person("p!reindex", input, True) if reindex else ""
         time.sleep(5)
         self.type_like_a_person("p!cleanup", input, True)
         time.sleep(5)
         self.type_like_a_person("Venda de pokemons concluída", input)
+    
+    def removeMarket(self, pokes,reindex=True):
+        logging("Removendo pokemons do mercado")
+        logging(f"Total de pokemons a serem removidos: {len(pokes)}")
+        driver = self.driver
+        input = driver.find_element(
+            By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
+        )
+        input.click()
+        self.type_like_a_person("p!cleanup", input, True)
+        time.sleep(10)
+        for poke in pokes:
+            time.sleep(5)
+            self.type_like_a_person("p!market remove {}".format(poke), input, True)
+            time.sleep(6)
+            self.confirm()
+        self.type_like_a_person("p!reindex", input, True) if reindex else ""
+        time.sleep(5)
+        self.type_like_a_person("p!cleanup", input, True)
+        time.sleep(5)
+        self.type_like_a_person("Restauração de pokemons concluída", input)
 
     def spamming(self, level):
         logging("Iniciando spamming")
@@ -110,6 +121,15 @@ class DiscordBot:
         input.click()
         self.type_like_a_person("p!s {}".format(pokeId), input, True)
 
+    def confirm(self):
+        driver = self.driver
+        try:
+            confirm = driver.find_element(By.XPATH, "//div[@class='label-31sIdr']")
+            confirm.click()
+            time.sleep(1)
+        except:
+            print("Não foi possível localizar o confirm")
+    
     @staticmethod
     def type_like_a_person(sentence, single_input_field, Timing=False):
         """Este código irá basicamente permitir que você simule a digitação como uma pessoa"""
@@ -120,6 +140,3 @@ class DiscordBot:
             time.sleep(0.015) if Timing else ""
         single_input_field.send_keys(Keys.RETURN)
 
-
-bot = DiscordBot()
-bot.login()
