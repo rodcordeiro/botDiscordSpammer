@@ -32,7 +32,7 @@ class Bot:
             By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
         )
 
-    def addMarket(self, start=0, limit=300, value=20, reindex=True):
+    def addMarket(self, start: int=0, limit:int=300, value:int=20, reindex:bool=True):
         logging("Iniciando venda de pokemons")
         logging(f"ID de inicio {start}")
         logging(f"ID final {limit}")
@@ -57,7 +57,7 @@ class Bot:
         time.sleep(5)
         self.type_like_a_person("Venda de pokemons concluída", input)
     
-    def removeMarket(self, pokes,reindex=True):
+    def removeMarket(self, pokes: list[int],reindex:bool=True):
         logging("Removendo pokemons do mercado")
         logging(f"Total de pokemons a serem removidos: {len(pokes)}")
         driver = self.driver
@@ -78,7 +78,7 @@ class Bot:
         time.sleep(5)
         self.type_like_a_person("Restauração de pokemons concluída", input)
 
-    def spamming(self, level):
+    def spamming(self, level:int):
         logging("Iniciando spamming")
         logging(f"Spamming para {level} níveis, utilizando {68 * level} mensagens.")
         driver = self.driver
@@ -94,7 +94,7 @@ class Bot:
             time.sleep(random.randint(1, 5) / 30)
             i += 1
 
-    def evolveByCandies(self, amount):
+    def evolveByCandies(self, amount:int):
         logging(f"Iniciando evolução através de rare candies")
         driver = self.driver
         input = driver.find_element(
@@ -111,7 +111,7 @@ class Bot:
         logging(
             f"Iniciando evolução através de rare candies finalizada, utilizando {candies} candies, com um investimento total de {amount - balance}P¢"
         )
-    def buyXpBooster(self, level = 1):
+    def buyXpBooster(self, level:int = 1):
         logging(f"Iniciando evolução através de rare candies")
         driver = self.driver
         input = driver.find_element(
@@ -124,7 +124,7 @@ class Bot:
             f"XP Booster bought."
         )
 
-    def changePoke(self, pokeId):
+    def changePoke(self, pokeId:int):
         logging("Changing selected pokemon")
         driver = self.driver
         input = driver.find_element(
