@@ -111,6 +111,18 @@ class Bot:
         logging(
             f"Iniciando evolução através de rare candies finalizada, utilizando {candies} candies, com um investimento total de {amount - balance}P¢"
         )
+    def buyXpBooster(self, level = 1):
+        logging(f"Iniciando evolução através de rare candies")
+        driver = self.driver
+        input = driver.find_element(
+            By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
+        )
+        input.click()
+        self.type_like_a_person(f"p!buy Xp Booster {level if level > 1 else ''}", input, True)
+        time.sleep(2)
+        logging(
+            f"XP Booster bought."
+        )
 
     def changePoke(self, pokeId):
         logging("Changing selected pokemon")
