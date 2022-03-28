@@ -90,7 +90,7 @@ class Bot:
         self.type_like_a_person("p!cleanup", input, True)
         time.sleep(10)
         for poke in pokes:
-            time.sleep(5)
+            time.sleep(2)
             self.type_like_a_person("p!market remove {}".format(poke), input, True)
             time.sleep(6)
             self.confirm()
