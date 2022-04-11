@@ -50,7 +50,7 @@ class Bot:
             )
             code = input("Please, inform your two factor authentication code: ")
             self.type_like_a_person(code, input_element, True)
-        time.sleep(2)
+        time.sleep(5)
 
     def addMarket(
         self, start: int = 0, limit: int = 300, value: int = 20, reindex: bool = True
@@ -116,6 +116,16 @@ class Bot:
             time.sleep(random.randint(1, 5) / 30)
             i += 1
 
+    def get_mega(self,Variation = None):
+        logging("Evoluindo pokemon para Mega")
+        driver = self.driver
+        input = driver.find_element(
+            By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
+        )
+        input.click()
+        self.type_like_a_person(f"{Variation if Variation else ''} Mega Evolution", input)
+        time.sleep(random.randint(1, 5) / 30)
+    
     def evolveByCandies(self, amount: int):
         logging(f"Iniciando evolução através de rare candies")
         driver = self.driver
@@ -163,7 +173,14 @@ class Bot:
             confirm.click()
             time.sleep(1)
         except:
-            logging("Não foi possível localizar o confirm")
+            logging("Não foi possível localizar o confirm. Tentando novamente")
+            time.sleep(2)
+            try:
+                confirm = driver.find_element(By.XPATH, "//div[@class='label-31sIdr']")
+                confirm.click()
+                time.sleep(1)
+            except:
+                logging("Não foi possível localizar o confirm.")
 
     @staticmethod
     def type_like_a_person(sentence, single_input_field, Timing=False):
