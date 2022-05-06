@@ -2,6 +2,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from enum import Enum
 import time
 import random
 import logging
@@ -17,7 +18,7 @@ def logging(message):
 
 class Bot:
     def __init__(self):
-        profile = webdriver.Chrome("./drivers/chromedriver_v99.exe")
+        profile = webdriver.Chrome("./drivers/chromedriver_v101 .exe")
         """Instancia do selenium """
         self.driver = profile
         logging("Iniciando browser")
@@ -116,16 +117,25 @@ class Bot:
             time.sleep(random.randint(1, 5) / 30)
             i += 1
 
-    def get_mega(self,Variation = None):
+    def get_mega(self, Variation=None):
+        def isValid(var: str):
+            if var == None:
+                return ""
+            if var.lower() == "x":
+                return "X"
+            if var.lower() == "y":
+                return "Y"
+            return ""
+
         logging("Evoluindo pokemon para Mega")
         driver = self.driver
         input = driver.find_element(
             By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
         )
         input.click()
-        self.type_like_a_person(f"{Variation if Variation else ''} Mega Evolution", input)
+        self.type_like_a_person(f"{isValid(Variation)} Mega Evolution", input, True)
         time.sleep(random.randint(1, 5) / 30)
-    
+
     def evolveByCandies(self, amount: int):
         logging(f"Iniciando evolução através de rare candies")
         driver = self.driver
