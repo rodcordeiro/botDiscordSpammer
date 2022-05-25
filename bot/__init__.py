@@ -18,7 +18,7 @@ def logging(message):
 
 class Bot:
     def __init__(self):
-        profile = webdriver.Chrome("./drivers/chromedriver_v101 .exe")
+        profile = webdriver.Chrome("./drivers/chromedriver_v101.exe")
         """Instancia do selenium """
         self.driver = profile
         logging("Iniciando browser")
