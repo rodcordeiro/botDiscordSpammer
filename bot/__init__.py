@@ -17,17 +17,60 @@ def logging(message):
 
 
 class Bot:
-    def __init__(self):
+    def __init__(self, actions_url="./.actions"):
+        # WebDriver options
         options = webdriver.ChromeOptions()
-        options.add_argument('--headless')
-        profile = webdriver.Chrome(options=options,executable_path="./drivers/chromedriver_v101.exe")
+        options.add_argument("--headless")
+        
+        # Actions
+        self.actions_url = actions_url
+        self.actions = {}
+        self._get_actions()
+        
+        profile = webdriver.Chrome(
+            options=options, executable_path="./drivers/chromedriver_v101.exe"
+        )
         """Instancia do selenium """
         self.driver = profile
         logging("Iniciando browser")
         self.message = "iwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhdhqww e woiwej llllll"
         self.input_label = "Message #spammar"
+        self.functions = {
+            "login": self.login,
+            "addMarket": self.addMarket,
+            "removeMarket": self.removeMarket,
+            "spamming": self.spamming,
+            "get_mega": self.get_mega,
+            "evolveByCandies": self.evolveByCandies,
+            "buyXpBooster": self.buyXpBooster,
+            "changePoke": self.changePoke,
+        }
+        
+        
+    def _get_actions(self):
+        try:
+            file1 = open(self.actions_url, "r")
+            Lines = file1.readlines()
+            for line in Lines:
+                if(line != '\n'):
+                    [action, value] = line.split("=")
+                    self.actions[action] = value.replace("\n", "")
+        except Exception as err:
+            logger.error(err)
+            raise Exception(err)
 
-    def login(self, username: str, password: str, has2F: bool = False)->None:
+
+    def get(self, func, *args):
+        def func_not_found():  # just in case we dont have the function
+            print("No Function " + func + " Found!")
+        func = getattr(self, func, func_not_found)
+        func(*args)
+    
+    def run(self):
+        for action in self.actions:
+            self.get(action,self.actions[action])
+
+    def login(self, username: str, password: str, has2F: bool = False) -> None:
         """
         Login Method
         :param username: Discord username
