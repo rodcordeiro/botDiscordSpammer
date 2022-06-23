@@ -21,12 +21,13 @@ class Bot:
         # WebDriver options
         options = webdriver.ChromeOptions()
         options.add_argument("--headless")
-        
+        options.add_argument("--log-level=3")
+
         # Actions
         self.actions_url = actions_url
         self.actions = {}
         self._get_actions()
-        
+
         profile = webdriver.Chrome(
             options=options, executable_path="./drivers/chromedriver_v101.exe"
         )
@@ -45,30 +46,35 @@ class Bot:
             "buyXpBooster": self.buyXpBooster,
             "changePoke": self.changePoke,
         }
-        
-        
+
     def _get_actions(self):
         try:
             file1 = open(self.actions_url, "r")
             Lines = file1.readlines()
             for line in Lines:
-                if(line != '\n'):
+                if line != "\n":
                     [action, value] = line.split("=")
                     self.actions[action] = value.replace("\n", "")
         except Exception as err:
             logger.error(err)
             raise Exception(err)
 
-
     def get(self, func, *args):
+        print("func", func)
+        print("*args", *args)
+
         def func_not_found():  # just in case we dont have the function
             print("No Function " + func + " Found!")
+
         func = getattr(self, func, func_not_found)
         func(*args)
-    
+
     def run(self):
+        print(self.actions)
         for action in self.actions:
-            self.get(action,self.actions[action])
+            print(action, self.actions[action])
+            self.get(action, self.actions[action])
+        self.driver.close()
 
     def login(self, username: str, password: str, has2F: bool = False) -> None:
         """
@@ -119,10 +125,10 @@ class Bot:
             By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
         )
         input.click()
-        i = start
+        i = int(start)
         self.type_like_a_person("p!cleanup", input, True)
         time.sleep(10)
-        while i < limit:
+        while i < int(limit):
             time.sleep(10)
             self.type_like_a_person("p!market add {} {}".format(i, value), input, True)
             time.sleep(6)
@@ -157,14 +163,16 @@ class Bot:
 
     def spamming(self, level: int):
         logging("Iniciando spamming")
-        logging(f"Spamming para {level} níveis, utilizando {68 * level} mensagens.")
+        logging(
+            f"Spamming para {level} níveis, utilizando {68 * int(level)} mensagens."
+        )
         driver = self.driver
         input = driver.find_element(
             By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
         )
         input.click()
         i = 0
-        total_messages = 68 * level
+        total_messages = 68 * int(level)
         while i < total_messages:
             logging(f"Mensagem nº {i}.")
             self.type_like_a_person(self.message, input)
@@ -198,14 +206,14 @@ class Bot:
         )
         input.click()
         candies = 0
-        balance = amount
+        balance = int(amount)
         while balance > 75:
             self.type_like_a_person("p!buy rare candies", input, True)
             time.sleep(2)
             balance -= 75
             candies += 1
         logging(
-            f"Iniciando evolução através de rare candies finalizada, utilizando {candies} candies, com um investimento total de {amount - balance}P¢"
+            f"Iniciando evolução através de rare candies finalizada, utilizando {candies} candies, com um investimento total de {int(amount) - balance}P¢"
         )
 
     def buyXpBooster(self, level: int = 1):
@@ -216,7 +224,7 @@ class Bot:
         )
         input.click()
         self.type_like_a_person(
-            f"p!buy Xp Booster {level if level > 1 else ''}", input, True
+            f"p!buy Xp Booster {level if int(level,base=10) > 1 else ''}", input, True
         )
         time.sleep(2)
         logging(f"XP Booster bought.")
