@@ -74,6 +74,7 @@ class Bot:
         for action in self.actions:
             print(action, self.actions[action])
             self.get(action, self.actions[action])
+            time.sleep(5)
         self.driver.close()
 
     def login(self, username: str, password: str, has2F: bool = False) -> None:
