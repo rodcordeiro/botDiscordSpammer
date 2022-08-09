@@ -17,25 +17,22 @@ def logging(message):
 
 
 class Bot:
-    def __init__(self, actions_url="./.actions"):
+    def __init__(self, lang: str = 'en'):
         # WebDriver options
         options = webdriver.ChromeOptions()
         options.add_argument("--headless")
         options.add_argument("--log-level=3")
 
-        # Actions
-        self.actions_url = actions_url
-        self.actions = {}
-        self._get_actions()
-
         profile = webdriver.Chrome(
-            options=options, executable_path="./drivers/chromedriver_v101.exe"
+            options=options, executable_path="./drivers/chromedriver_v104.exe"
         )
         """Instancia do selenium """
         self.driver = profile
         logging("Iniciando browser")
         self.message = "iwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhdhqww e woiwej llllll"
-        self.input_label = "Message #spammar"
+        self.lang = lang
+        self.input_label = "Message #spammar" if lang == "en"  else "Conversar em #spammar"
+        self.authorize_button_labe = 'Authorize' if lang == "en"  else "Autorizar"
         self.default_channel = "https://discord.com/channels/911248622421704704/925735083313348618"
 
 
@@ -60,7 +57,11 @@ class Bot:
             driver.get(self.default_channel)
         time.sleep(5)
         # <input class="inputDefault-3FGxgL input-2g-os5 inputField-2RZxdl" name="email" type="text" placeholder="" aria-label="E-mail ou número de telefone" autocomplete="off" maxlength="999" spellcheck="false" aria-labelledby="uid_17" value="">
-        input_element = driver.find_element(By.XPATH, "//input[@name='email']")
+        try:
+            input_element = driver.find_element(By.XPATH, "//input[@name='email']")
+        except:
+            logger.error('Email input not found')
+            return
         self.type_like_a_person(username, input_element, True)
 
         # <input class="inputDefault-3FGxgL input-2g-os5" name="password" type="password" placeholder="" aria-label="Senha" autocomplete="off" maxlength="999" spellcheck="false" aria-labelledby="uid_19" value="">
@@ -226,24 +227,15 @@ class Bot:
 
     def vote(self):
         driver = self.driver
-        driver.get('https://top.gg/bot/716390085896962058/vote')
+        logger.info('Opening authorizing page')
+        driver.get('https://top.gg/login?redir=%2Fbot%2F716390085896962058%2Fvote')
         time.sleep(5)
+        logger.info('Authorizing...')
         try:
-            login_button = driver.find_element(
-                By.XPATH, "//a[@href='/login?redir=%2Fbot%2F716390085896962058%2Fvote']"
-            )
+            authorize_button = driver.find_element(By.XPATH,f"//button/div[text()='{self.authorize_button_labe}']")
         except:
-            print("Login button not found")
+            logger.error("Authorize button not found")
             return driver.get(self.default_channel)
-        login_button.click()
-        time.sleep(5)
-        self.login(self.username,self.password,self.has2F,False)
-        try:
-            authorize_button = driver.find_element(By.XPATH,"//div[@class='footer-3Gu_Tl']/button[text()='Autorizar']")
-        except:
-            print("Authorize button not found")
-            return driver.get(self.default_channel)
-        print(authorize_button)
         authorize_button.click()
         time.sleep(25)
         vote_button = driver.find_element(By.XPATH,"//button[text()='Vote']")
