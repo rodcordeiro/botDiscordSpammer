@@ -20,7 +20,7 @@ class Bot:
     def __init__(self, lang: str = 'en'):
         # WebDriver options
         options = webdriver.ChromeOptions()
-        options.add_argument("--headless")
+        # options.add_argument("--headless")
         options.add_argument("--log-level=3")
 
         profile = webdriver.Chrome(
@@ -97,17 +97,17 @@ class Bot:
         )
         input.click()
         i = int(start)
-        self.type_like_a_person("@Pokétwo cleanup", input, True)
+        self.type_like_a_person("<@716390085896962058> cleanup", input, True)
         time.sleep(10)
         while i < int(limit):
             time.sleep(10)
-            self.type_like_a_person("@Pokétwo market add {} {}".format(i, value), input, True)
+            self.type_like_a_person("<@716390085896962058> market add {} {}".format(i, value), input, True)
             time.sleep(6)
             self.confirm()
             i += 1
-        self.type_like_a_person("@Pokétwo reindex", input, True) if reindex else ""
+        self.type_like_a_person("<@716390085896962058> reindex", input, True) if reindex else ""
         time.sleep(5)
-        self.type_like_a_person("@Pokétwo cleanup", input, True)
+        self.type_like_a_person("<@716390085896962058> cleanup", input, True)
         time.sleep(5)
         self.type_like_a_person("Venda de pokemons concluída", input)
 
@@ -119,16 +119,16 @@ class Bot:
             By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
         )
         input.click()
-        self.type_like_a_person("@Pokétwo cleanup", input, True)
+        self.type_like_a_person("<@716390085896962058> cleanup", input, True)
         time.sleep(10)
         for poke in pokes:
             time.sleep(2)
-            self.type_like_a_person("@Pokétwo market remove {}".format(poke), input, True)
+            self.type_like_a_person("<@716390085896962058> market remove {}".format(poke), input, True)
             time.sleep(6)
             self.confirm()
-        self.type_like_a_person("@Pokétwo reindex", input, True) if reindex else ""
+        self.type_like_a_person("<@716390085896962058> reindex", input, True) if reindex else ""
         time.sleep(5)
-        self.type_like_a_person("@Pokétwo cleanup", input, True)
+        self.type_like_a_person("<@716390085896962058> cleanup", input, True)
         time.sleep(5)
         self.type_like_a_person("Restauração de pokemons concluída", input)
 
@@ -179,7 +179,7 @@ class Bot:
         candies = 0
         balance = int(amount)
         while balance > 75:
-            self.type_like_a_person("@Pokétwo buy rare candies", input, True)
+            self.type_like_a_person("<@716390085896962058> buy rare candies", input, True)
             time.sleep(2)
             balance -= 75
             candies += 1
@@ -195,7 +195,7 @@ class Bot:
         )
         input.click()
         self.type_like_a_person(
-            f"@Pokétwo buy Xp Booster {level if int(level,base=10) > 1 else ''}", input, True
+            f"<@716390085896962058> buy Xp Booster {level if int(level) > 1 else ''}", input, True
         )
         time.sleep(2)
         logging(f"XP Booster bought.")
@@ -207,7 +207,7 @@ class Bot:
             By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
         )
         input.click()
-        self.type_like_a_person("@Pokétwo s {}".format(pokeId), input, True)
+        self.type_like_a_person("<@716390085896962058> s {}".format(pokeId), input, True)
 
     def confirm(self):
         driver = self.driver

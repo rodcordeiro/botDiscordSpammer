@@ -4,7 +4,7 @@ from decouple import config
 
 bot = Bot()
 bot.login(config("LOGIN"), config("PASSWORD"), has2F=True)
-bot.vote()
+# bot.vote()
 
 
 # bot.addMarket(80, 190, 5)
