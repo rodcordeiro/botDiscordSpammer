@@ -36,48 +36,10 @@ class Bot:
         logging("Iniciando browser")
         self.message = "iwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhdhqww e woiwej llllll"
         self.input_label = "Message #spammar"
-        self.functions = {
-            "login": self.login,
-            "addMarket": self.addMarket,
-            "removeMarket": self.removeMarket,
-            "spamming": self.spamming,
-            "get_mega": self.get_mega,
-            "evolveByCandies": self.evolveByCandies,
-            "buyXpBooster": self.buyXpBooster,
-            "changePoke": self.changePoke,
-        }
+        self.default_channel = "https://discord.com/channels/911248622421704704/925735083313348618"
 
-    def _get_actions(self):
-        try:
-            file1 = open(self.actions_url, "r")
-            Lines = file1.readlines()
-            for line in Lines:
-                if line != "\n":
-                    [action, value] = line.split("=")
-                    self.actions[action] = value.replace("\n", "")
-        except Exception as err:
-            logger.error(err)
-            raise Exception(err)
 
-    def get(self, func, *args):
-        print("func", func)
-        print("*args", *args)
-
-        def func_not_found():  # just in case we dont have the function
-            print("No Function " + func + " Found!")
-
-        func = getattr(self, func, func_not_found)
-        func(*args)
-
-    def run(self):
-        print(self.actions)
-        for action in self.actions:
-            print(action, self.actions[action])
-            self.get(action, self.actions[action])
-            time.sleep(5)
-        self.driver.close()
-
-    def login(self, username: str, password: str, has2F: bool = False) -> None:
+    def login(self, username: str, password: str, has2F: bool = False,openPage:bool = True)->None:
         """
         Login Method
         :param username: Discord username
@@ -86,9 +48,16 @@ class Bot:
         :type password: :obj:`str`
         :param has2F: If discord has two factor authentication
         :type has2F: :obj:`bool`
+        :param openPage: Defines it should open the login page
+        :type openPage: :obj:`bool`
         """
         driver = self.driver
-        driver.get("https://discord.com/channels/911248622421704704/925735083313348618")
+        self.username = username
+        self.password = password
+        self.has2F = has2F
+
+        if openPage:
+            driver.get(self.default_channel)
         time.sleep(5)
         # <input class="inputDefault-3FGxgL input-2g-os5 inputField-2RZxdl" name="email" type="text" placeholder="" aria-label="E-mail ou número de telefone" autocomplete="off" maxlength="999" spellcheck="false" aria-labelledby="uid_17" value="">
         input_element = driver.find_element(By.XPATH, "//input[@name='email']")
@@ -127,17 +96,17 @@ class Bot:
         )
         input.click()
         i = int(start)
-        self.type_like_a_person("p!cleanup", input, True)
+        self.type_like_a_person("@Pokétwo cleanup", input, True)
         time.sleep(10)
         while i < int(limit):
             time.sleep(10)
-            self.type_like_a_person("p!market add {} {}".format(i, value), input, True)
+            self.type_like_a_person("@Pokétwo market add {} {}".format(i, value), input, True)
             time.sleep(6)
             self.confirm()
             i += 1
-        self.type_like_a_person("p!reindex", input, True) if reindex else ""
+        self.type_like_a_person("@Pokétwo reindex", input, True) if reindex else ""
         time.sleep(5)
-        self.type_like_a_person("p!cleanup", input, True)
+        self.type_like_a_person("@Pokétwo cleanup", input, True)
         time.sleep(5)
         self.type_like_a_person("Venda de pokemons concluída", input)
 
@@ -149,16 +118,16 @@ class Bot:
             By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
         )
         input.click()
-        self.type_like_a_person("p!cleanup", input, True)
+        self.type_like_a_person("@Pokétwo cleanup", input, True)
         time.sleep(10)
         for poke in pokes:
             time.sleep(2)
-            self.type_like_a_person("p!market remove {}".format(poke), input, True)
+            self.type_like_a_person("@Pokétwo market remove {}".format(poke), input, True)
             time.sleep(6)
             self.confirm()
-        self.type_like_a_person("p!reindex", input, True) if reindex else ""
+        self.type_like_a_person("@Pokétwo reindex", input, True) if reindex else ""
         time.sleep(5)
-        self.type_like_a_person("p!cleanup", input, True)
+        self.type_like_a_person("@Pokétwo cleanup", input, True)
         time.sleep(5)
         self.type_like_a_person("Restauração de pokemons concluída", input)
 
@@ -209,7 +178,7 @@ class Bot:
         candies = 0
         balance = int(amount)
         while balance > 75:
-            self.type_like_a_person("p!buy rare candies", input, True)
+            self.type_like_a_person("@Pokétwo buy rare candies", input, True)
             time.sleep(2)
             balance -= 75
             candies += 1
@@ -225,7 +194,7 @@ class Bot:
         )
         input.click()
         self.type_like_a_person(
-            f"p!buy Xp Booster {level if int(level,base=10) > 1 else ''}", input, True
+            f"@Pokétwo buy Xp Booster {level if int(level,base=10) > 1 else ''}", input, True
         )
         time.sleep(2)
         logging(f"XP Booster bought.")
@@ -237,7 +206,7 @@ class Bot:
             By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
         )
         input.click()
-        self.type_like_a_person("p!s {}".format(pokeId), input, True)
+        self.type_like_a_person("@Pokétwo s {}".format(pokeId), input, True)
 
     def confirm(self):
         driver = self.driver
@@ -255,6 +224,35 @@ class Bot:
             except:
                 logging("Não foi possível localizar o confirm.")
 
+    def vote(self):
+        driver = self.driver
+        driver.get('https://top.gg/bot/716390085896962058/vote')
+        time.sleep(5)
+        try:
+            login_button = driver.find_element(
+                By.XPATH, "//a[@href='/login?redir=%2Fbot%2F716390085896962058%2Fvote']"
+            )
+        except:
+            print("Login button not found")
+            return driver.get(self.default_channel)
+        login_button.click()
+        time.sleep(5)
+        self.login(self.username,self.password,self.has2F,False)
+        try:
+            authorize_button = driver.find_element(By.XPATH,"//div[@class='footer-3Gu_Tl']/button[text()='Autorizar']")
+        except:
+            print("Authorize button not found")
+            return driver.get(self.default_channel)
+        print(authorize_button)
+        authorize_button.click()
+        time.sleep(25)
+        vote_button = driver.find_element(By.XPATH,"//button[text()='Vote']")
+        vote_button.click()
+        time.sleep(3)
+        driver.get(self.default_channel)
+        time.sleep(3)
+        
+        
     @staticmethod
     def type_like_a_person(sentence, single_input_field, Timing=False):
         """Este código irá basicamente permitir que você simule a digitação como uma pessoa"""
