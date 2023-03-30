@@ -24,7 +24,7 @@ class Bot:
         options.add_argument("--log-level=3")
 
         profile = webdriver.Chrome(
-            options=options, executable_path="./drivers/chromedriver_v104.exe"
+            options=options, executable_path="./drivers/chromedriver_v111.exe"
         )
         """Instancia do selenium """
         self.driver = profile
