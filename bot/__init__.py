@@ -5,22 +5,22 @@ from selenium.webdriver.common.keys import Keys
 from enum import Enum
 import time
 import random
-import logging
-
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("Spamming bot")
+from utils import Loger
 
 
+logger = Loger("Spamming bot")
 def logging(message):
     logger.info(message)
     # print(message)
+
+
 
 
 class Bot:
     def __init__(self, lang: str = 'en'):
         # WebDriver options
         options = webdriver.ChromeOptions()
-        options.add_argument("--headless")
+        # options.add_argument("--headless")
         options.add_argument("--log-level=3")
 
         profile = webdriver.Chrome(
@@ -36,7 +36,7 @@ class Bot:
         self.default_channel = "https://discord.com/channels/911248622421704704/925735083313348618"
 
 
-    def login(self, username: str, password: str, has2F: bool = False,openPage:bool = True)->None:
+    def login(self, username: str, password: str, has2F: bool = False,openPage:bool = True,twoFacCode= int )->None:
         """
         Login Method
         :param username: Discord username
@@ -80,7 +80,15 @@ class Bot:
                 By.XPATH,
                 "//input[@aria-label='Digite o código de recuperação/autorização do Discord']",
             )
-            code = input("Please, inform your two factor authentication code: ")
+            code = 0
+            print(code,twoFacCode)
+            if twoFacCode:
+                logging('hasCode')
+                code = twoFacCode
+            else:
+                logging('doesnthascode')
+                code = input("Please, inform your two factor authentication code: ")
+            print('got here')
             self.type_like_a_person(code, input_element, True)
         time.sleep(5)
 
@@ -224,7 +232,11 @@ class Bot:
                 time.sleep(1)
             except:
                 logging("Não foi possível localizar o confirm.")
-
+    def solve_for(self, name: str,*args):
+        if hasattr(self, name) and callable(func := getattr(self, name)):
+            func(*args)
+    
+    @staticmethod
     def vote(self):
         driver = self.driver
         logger.info('Opening authorizing page')
