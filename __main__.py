@@ -1,9 +1,12 @@
+# -*- coding: utf-8 -*-
 import sys, getopt
 from bot import Bot
 from decouple import config
 from utils import Loger
 
 logger = Loger('main')
+
+import time
 
 
 def main(argv):
