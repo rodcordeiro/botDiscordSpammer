@@ -20,7 +20,7 @@ class Bot:
     def __init__(self, lang: str = 'en'):
         # WebDriver options
         options = webdriver.ChromeOptions()
-        # options.add_argument("--headless")
+        options.add_argument("--headless")
         options.add_argument("--log-level=3")
 
         profile = webdriver.Chrome(
