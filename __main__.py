@@ -2,13 +2,13 @@
 import sys, getopt
 from bot import Bot
 from decouple import config
-from utils import Loger
+from utils import Loger,gracefully_shutdown
 
 logger = Loger('main')
 
 import time
 
-
+@gracefully_shutdown(logger)
 def main(argv):
     opts, args = getopt.getopt(argv,"ht:x:m:r:g:c:p:s:",["two-factor=","xp-boster=","market=","remove-market=","get-mega=","candies=","pokemon-select=","spamming="])
     has2f = False

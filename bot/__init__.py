@@ -1,28 +1,16 @@
 # -*- coding: utf-8 -*-
-import sys
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time
 import random
 
-from utils import Loger
+from utils import Loger, gracefully_shutdown
 
 
-logger = Loger("Spamming bot")
+logger = Loger("bot")
 
-def gracefully_shutdown(function):
-    def wrapper(*args, **kwargs):
-        try:
-            start_time = time.time()
-            result = function(*args, **kwargs)
-            end_time = time.time()
-            logger.debug(f"Method Name: {function.__name__}, Args: {args}, Kwargs: {kwargs}, Execution Time: {end_time - start_time}")
-            return result
-        except KeyboardInterrupt:
-            logger.info('exiting after keyboard.')
-            sys.exit()
-    return wrapper
+
 
 
 class Bot:
@@ -45,7 +33,7 @@ class Bot:
         self.default_channel = "https://discord.com/channels/911248622421704704/925735083313348618"
 
 
-    @gracefully_shutdown
+    @gracefully_shutdown(logger)
     def login(self, username: str, password: str, has2F: bool = False,openPage:bool = True,twoFacCode= int )->None:
         """
         Login Method
@@ -98,7 +86,7 @@ class Bot:
             self.type_like_a_person(code, input_element, True)
         time.sleep(5)
 
-    @gracefully_shutdown
+    @gracefully_shutdown(logger)
     def addMarket(
         self, start: int = 0, limit: int = 300, value: int = 20, reindex: bool = True
     ):
@@ -150,7 +138,7 @@ class Bot:
         time.sleep(5)
         self.type_like_a_person("Restauração de pokemons concluída", input)
 
-    @gracefully_shutdown
+    @gracefully_shutdown(logger)
     def spamming(self, level: int):
         logger.info("Iniciando spamming")
         logger.info(
@@ -169,7 +157,7 @@ class Bot:
             time.sleep(random.randint(1, 5) / 30)
             i += 1
 
-    @gracefully_shutdown
+    @gracefully_shutdown(logger)
     def get_mega(self, Variation=None):
         def isValid(var: str):
             if var == None:
@@ -189,7 +177,7 @@ class Bot:
         self.type_like_a_person(f"{isValid(Variation)} Mega Evolution", input, True)
         time.sleep(random.randint(1, 5) / 30)
 
-    @gracefully_shutdown
+    @gracefully_shutdown(logger)
     def evolveByCandies(self, amount: int):
         logger.info(f"Iniciando evolução através de rare candies")
         driver = self.driver
@@ -208,7 +196,7 @@ class Bot:
             f"Iniciando evolução através de rare candies finalizada, utilizando {candies} candies, com um investimento total de {int(amount) - balance}P¢"
         )
 
-    @gracefully_shutdown
+    @gracefully_shutdown(logger)
     def buyXpBooster(self, level: int = 1):
         logger.info(f"Iniciando compra de XP Booster {level}")
         driver = self.driver
@@ -222,7 +210,7 @@ class Bot:
         time.sleep(2)
         logger.info(f"XP Booster bought.")
 
-    @gracefully_shutdown
+    @gracefully_shutdown(logger)
     def changePoke(self, pokeId: int):
         logger.info("Changing selected pokemon")
         driver = self.driver
@@ -232,7 +220,7 @@ class Bot:
         input.click()
         self.type_like_a_person("<@716390085896962058> s {}".format(pokeId), input, True)
 
-    @gracefully_shutdown
+    @gracefully_shutdown(logger)
     def confirm(self):
         driver = self.driver
         try:
@@ -250,7 +238,7 @@ class Bot:
             except:
                 logger.error("Não foi possível localizar o confirm.")
     
-    @gracefully_shutdown
+    @gracefully_shutdown(logger)
     def solve_for(self, name: str,*args):
         if hasattr(self, name) and callable(func := getattr(self, name)):
             func(*args)
