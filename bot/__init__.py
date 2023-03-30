@@ -5,10 +5,10 @@ from selenium.webdriver.common.keys import Keys
 import time
 import random
 
-from utils import Loger, gracefully_shutdown
+from utils import Logger, gracefully_shutdown
 
 
-logger = Loger("bot")
+logger = Logger("bot")
 
 
 
