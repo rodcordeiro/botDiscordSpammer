@@ -9,9 +9,7 @@ from utils import Loger
 
 
 logger = Loger("Spamming bot")
-def logging(message):
-    logger.info(message)
-    # print(message)
+
 
 
 
@@ -28,7 +26,7 @@ class Bot:
         )
         """Instancia do selenium """
         self.driver = profile
-        logging("Iniciando browser")
+        logger.debug("Iniciando browser")
         self.message = "iwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhbe wihweiub ewkrjeqiruiqnwe qe qwrioiqje woijdwuii dhqww e woiwej dfhqqoihn ekj rqeeopjdiwqjeqwdb ewjhdhqww e woiwej llllll"
         self.lang = lang
         self.input_label = "Message #spammar" if lang == "en"  else "Conversar em #spammar"
@@ -71,7 +69,7 @@ class Bot:
         try:
             input_element.send_keys(Keys.RETURN)
         except:
-            logging("Input not found")
+            logger.error("Input not found")
             pass
         if has2F is not False:
             time.sleep(2)
@@ -81,24 +79,20 @@ class Bot:
                 "//input[@aria-label='Digite o código de recuperação/autorização do Discord']",
             )
             code = 0
-            print(code,twoFacCode)
             if twoFacCode:
-                logging('hasCode')
                 code = twoFacCode
             else:
-                logging('doesnthascode')
                 code = input("Please, inform your two factor authentication code: ")
-            print('got here')
             self.type_like_a_person(code, input_element, True)
         time.sleep(5)
 
     def addMarket(
         self, start: int = 0, limit: int = 300, value: int = 20, reindex: bool = True
     ):
-        logging("Iniciando venda de pokemons")
-        logging(f"ID de inicio {start}")
-        logging(f"ID final {limit}")
-        logging(f"Valor de venda {value}")
+        logger.info("Iniciando venda de pokemons")
+        logger.info(f"ID de inicio {start}")
+        logger.info(f"ID final {limit}")
+        logger.info(f"Valor de venda {value}")
         driver = self.driver
         input = driver.find_element(
             By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
@@ -108,20 +102,23 @@ class Bot:
         self.type_like_a_person("<@716390085896962058> cleanup", input, True)
         time.sleep(10)
         while i < int(limit):
+            logger.debug(f"adding {i} to market")
             time.sleep(10)
             self.type_like_a_person("<@716390085896962058> market add {} {}".format(i, value), input, True)
             time.sleep(6)
             self.confirm()
             i += 1
+        logger.debug('Reindexing pokemons')
         self.type_like_a_person("<@716390085896962058> reindex", input, True) if reindex else ""
         time.sleep(5)
+        logger.debug('Cleaning messages')
         self.type_like_a_person("<@716390085896962058> cleanup", input, True)
         time.sleep(5)
         self.type_like_a_person("Venda de pokemons concluída", input)
 
     def removeMarket(self, pokes: list[int], reindex: bool = True):
-        logging("Removendo pokemons do mercado")
-        logging(f"Total de pokemons a serem removidos: {len(pokes)}")
+        logger.info("Removendo pokemons do mercado")
+        logger.info(f"Total de pokemons a serem removidos: {len(pokes)}")
         driver = self.driver
         input = driver.find_element(
             By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
@@ -141,8 +138,8 @@ class Bot:
         self.type_like_a_person("Restauração de pokemons concluída", input)
 
     def spamming(self, level: int):
-        logging("Iniciando spamming")
-        logging(
+        logger.info("Iniciando spamming")
+        logger.info(
             f"Spamming para {level} níveis, utilizando {68 * int(level)} mensagens."
         )
         driver = self.driver
@@ -153,7 +150,7 @@ class Bot:
         i = 0
         total_messages = 68 * int(level)
         while i < total_messages:
-            logging(f"Mensagem nº {i}.")
+            logger.info(f"Mensagem nº {i}.")
             self.type_like_a_person(self.message, input)
             time.sleep(random.randint(1, 5) / 30)
             i += 1
@@ -168,7 +165,7 @@ class Bot:
                 return "Y"
             return ""
 
-        logging("Evoluindo pokemon para Mega")
+        logger.info("Evoluindo pokemon para Mega")
         driver = self.driver
         input = driver.find_element(
             By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
@@ -178,7 +175,7 @@ class Bot:
         time.sleep(random.randint(1, 5) / 30)
 
     def evolveByCandies(self, amount: int):
-        logging(f"Iniciando evolução através de rare candies")
+        logger.info(f"Iniciando evolução através de rare candies")
         driver = self.driver
         input = driver.find_element(
             By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
@@ -191,12 +188,12 @@ class Bot:
             time.sleep(2)
             balance -= 75
             candies += 1
-        logging(
+        logger.info(
             f"Iniciando evolução através de rare candies finalizada, utilizando {candies} candies, com um investimento total de {int(amount) - balance}P¢"
         )
 
     def buyXpBooster(self, level: int = 1):
-        logging(f"Iniciando compra de XP Booster {level}")
+        logger.info(f"Iniciando compra de XP Booster {level}")
         driver = self.driver
         input = driver.find_element(
             By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
@@ -206,10 +203,10 @@ class Bot:
             f"<@716390085896962058> buy Xp Booster {level if int(level) > 1 else ''}", input, True
         )
         time.sleep(2)
-        logging(f"XP Booster bought.")
+        logger.info(f"XP Booster bought.")
 
     def changePoke(self, pokeId: int):
-        logging("Changing selected pokemon")
+        logger.info("Changing selected pokemon")
         driver = self.driver
         input = driver.find_element(
             By.XPATH, "//div[@aria-label='{}']".format(self.input_label)
@@ -222,16 +219,17 @@ class Bot:
         try:
             confirm = driver.find_element(By.XPATH, "//div[@class='label-31sIdr']")
             confirm.click()
+            logger.debug("Confirmed")
             time.sleep(1)
         except:
-            logging("Não foi possível localizar o confirm. Tentando novamente")
+            logger.error("Não foi possível localizar o confirm. Tentando novamente")
             time.sleep(2)
             try:
                 confirm = driver.find_element(By.XPATH, "//div[@class='label-31sIdr']")
                 confirm.click()
                 time.sleep(1)
             except:
-                logging("Não foi possível localizar o confirm.")
+                logger.error("Não foi possível localizar o confirm.")
     def solve_for(self, name: str,*args):
         if hasattr(self, name) and callable(func := getattr(self, name)):
             func(*args)
